@@ -1,7 +1,7 @@
 ﻿import sys
 
 try:
-    from trigoo_ui import Calculator
+    from calculator_ui import Calculator
     GUI_AVAILABLE = True
 except Exception as e:
     print('GUI is not available (Kivy missing or failed to launch):', e)

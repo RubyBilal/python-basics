@@ -7,7 +7,7 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.popup import Popup
 from kivy.core.window import Window
 from kivy.graphics import Color, RoundedRectangle
-from trigoo_math import evaluate_expression, apply_math_function
+from calculator_math import evaluate_expression, apply_math_function
 import math
 
 
