@@ -7,7 +7,7 @@ except Exception as e:
     print('GUI is not available (Kivy missing or failed to launch):', e)
     GUI_AVAILABLE = False
 
-from trigoo_math import evaluate_expression
+from calculator_math import evaluate_expression
 
 
 def run_cli():
@@ -44,12 +44,42 @@ def run_cli():
             print('Error:', err)
 
 
+def print_usage():
+    print('Usage: calculator_launcher.py [--gui | --cli]')
+    print('  --gui : attempt to run Kivy GUI (requires kivy installed)')
+    print('  --cli : run console mode regardless of GUI availability')
+    print('  no args: GUI if available, else CLI fallback')
+
 if __name__ == '__main__':
-    if GUI_AVAILABLE:
-        try:
-            Calculator().run()
-        except Exception as e:
-            print('Failed to run GUI, falling back to CLI:', e)
-            run_cli()
-    else:
+    args = sys.argv[1:]
+    force_mode = None
+    if len(args) > 1:
+        print_usage()
+        sys.exit(1)
+    if len(args) == 1:
+        if args[0] == '--gui':
+            force_mode = 'gui'
+        elif args[0] == '--cli':
+            force_mode = 'cli'
+        elif args[0] in ('-h', '--help'):
+            print_usage(); sys.exit(0)
+        else:
+            print('Unknown argument:', args[0])
+            print_usage(); sys.exit(1)
+
+    if force_mode == 'cli':
         run_cli()
+    elif force_mode == 'gui':
+        if not GUI_AVAILABLE:
+            print('GUI is not available (kivy missing). Use --cli for console mode.')
+            sys.exit(1)
+        Calculator().run()
+    else:
+        if GUI_AVAILABLE:
+            try:
+                Calculator().run()
+            except Exception as e:
+                print('Failed to run GUI, falling back to CLI:', e)
+                run_cli()
+        else:
+            run_cli()
